@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 )
 
 func ValidateCreateProduct() gin.HandlerFunc {
@@ -70,6 +71,20 @@ func ValidateGetProduct() gin.HandlerFunc {
 }
 func ValidateGetProducts() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-
+		keyword, _ := ctx.GetQuery("keyword")
+		limitStr, _ := ctx.GetQuery("limit")
+		pageStr, _ := ctx.GetQuery("page")
+		limit, err := strconv.Atoi(limitStr)
+		if err != nil {
+			limit = 10
+		}
+		page, err := strconv.Atoi(pageStr)
+		if err != nil {
+			page = 1
+		}
+		ctx.Set("limit", limit)
+		ctx.Set("page", page)
+		ctx.Set("keyword", keyword)
+		ctx.Next()
 	}
 }

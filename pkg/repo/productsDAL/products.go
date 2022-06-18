@@ -1,6 +1,7 @@
 package productsDAL
 
 import (
+	"fmt"
 	"github.com/MahmoudMekki/MDS-task/database"
 	"github.com/MahmoudMekki/MDS-task/pkg/models"
 )
@@ -31,11 +32,14 @@ func GetProduct(sku string) (prod models.Product, err error) {
 	err = dbConn.Preload("Orders").Table(models.ProductsTableName).Where("sku=?", sku).Find(&prod).Error
 	return prod, err
 }
-func GetProducts(paginator models.Paginator) (prods []models.Product, err error) {
+func GetProducts(paginator models.Paginator) (prods []models.Product, hits int64, err error) {
 	dbConn, err := database.GetDatabaseConnection()
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
-	err = dbConn.Table(models.ProductsTableName).Offset(paginator.GetOffset()).Limit(paginator.GetLimit()).Find(&prods).Error
-	return prods, err
+	err = dbConn.Table(models.ProductsTableName).
+		Where(" name LIKE ?", fmt.Sprintf("%s%s%s", "%", paginator.KeyWord, "%")).
+		Count(&hits).
+		Offset(paginator.GetOffset()).Limit(paginator.GetLimit()).Find(&prods).Error
+	return prods, hits, err
 }
