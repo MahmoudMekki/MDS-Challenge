@@ -39,7 +39,13 @@ func ValidateUpdateProduct() gin.HandlerFunc {
 
 func ValidateGetProduct() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-
+		sku, ok := ctx.Params.Get("sku")
+		if !ok || len(sku) < 3 {
+			ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "invalid sku"})
+			return
+		}
+		ctx.Set("sku", sku)
+		ctx.Next()
 	}
 }
 func ValidateGetProducts() gin.HandlerFunc {
