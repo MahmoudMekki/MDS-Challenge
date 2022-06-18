@@ -3,6 +3,7 @@ module github.com/MahmoudMekki/MDS-task
 go 1.17
 
 require (
+	github.com/faceair/jio v1.0.1
 	github.com/gin-gonic/gin v1.8.1
 	github.com/go-gormigrate/gormigrate/v2 v2.0.2
 	github.com/go-redis/redis v6.15.9+incompatible
