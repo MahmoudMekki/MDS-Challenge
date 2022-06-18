@@ -18,8 +18,8 @@ func CreateProduct(ctx *gin.Context) {
 	product, err := productsDAL.CreateProduct(product)
 	if err != nil {
 		log.Err(err).Msg(err.Error())
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "error while creating the product"})
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "this product is already existed"})
 		return
 	}
-	ctx.JSON(http.StatusOK, product)
+	ctx.JSON(http.StatusCreated, product)
 }

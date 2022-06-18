@@ -9,15 +9,15 @@ import (
 
 func GetProduct(ctx *gin.Context) {
 	sku := ctx.GetString("sku")
-	prod, err := productsDAL.GetProduct(sku)
-	if err != nil || prod.Id <= 0 {
-		if err != nil {
-			log.Err(err).Msg(err.Error())
-			ctx.JSON(http.StatusInternalServerError, gin.H{"error": "error occurred while getting the prod"})
-			return
-		}
+	prods, err := productsDAL.GetProduct(sku)
+	if err != nil {
+		log.Err(err).Msg(err.Error())
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "error occurred while getting the prod"})
+		return
+	}
+	if len(prods) == 0 {
 		ctx.JSON(http.StatusNotFound, gin.H{"error": "no prod with this SKU"})
 		return
 	}
-	ctx.JSON(http.StatusOK, prod)
+	ctx.JSON(http.StatusOK, prods)
 }

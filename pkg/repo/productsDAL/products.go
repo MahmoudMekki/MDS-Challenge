@@ -24,13 +24,13 @@ func UpdateProduct(prod models.Product) (models.Product, error) {
 	return prod, err
 }
 
-func GetProduct(sku string) (prod models.Product, err error) {
+func GetProduct(sku string) (prods []models.Product, err error) {
 	dbConn, err := database.GetDatabaseConnection()
 	if err != nil {
-		return models.Product{}, err
+		return nil, err
 	}
-	err = dbConn.Preload("Orders").Table(models.ProductsTableName).Where("sku=?", sku).Find(&prod).Error
-	return prod, err
+	err = dbConn.Preload("Orders").Table(models.ProductsTableName).Where("sku=?", sku).Find(&prods).Error
+	return prods, err
 }
 func GetProducts(paginator models.Paginator) (prods []models.Product, hits int64, err error) {
 	dbConn, err := database.GetDatabaseConnection()
