@@ -14,5 +14,17 @@ services:
       - '3306'
     volumes:
       - my-db:/var/lib/mysql
+  rabbit-mq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbit-mq
+    ports:
+      - 5672:5672   # for sender and consumer connections
+      - 15672:15672 # for serve RabbitMQ GUI
+    restart: always
+    networks:
+      - dev-network
 volumes:
   my-db:
+networks:
+  dev-network:
+    driver: bridge

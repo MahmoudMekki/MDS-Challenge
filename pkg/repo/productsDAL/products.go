@@ -43,3 +43,27 @@ func GetProducts(paginator models.Paginator) (prods []models.Product, hits int64
 		Offset(paginator.GetOffset()).Limit(paginator.GetLimit()).Find(&prods).Error
 	return prods, hits, err
 }
+
+func GetProdBySkuAndCountry(sku, country string) (prod models.Product, existed bool, err error) {
+	dbConn, err := database.GetDatabaseConnection()
+	if err != nil {
+		return prod, existed, err
+	}
+	err = dbConn.Table(models.ProductsTableName).Where("sku=? and country_code=?", sku, country).Find(&prod).Error
+	if err != nil {
+		return prod, false, err
+	}
+	if prod.Id <= 0 {
+		return prod, false, nil
+	}
+	return prod, true, nil
+}
+
+func UpdateProdStock(productID int, change int) error {
+	dbConn, err := database.GetDatabaseConnection()
+	if err != nil {
+		return err
+	}
+	err = dbConn.Exec("update products set amount = amount+? where id=?", change, productID).Error
+	return err
+}

@@ -21,5 +21,6 @@ type routerImp struct {
 
 func (r *routerImp) SetRouter() *gin.Engine {
 	r.setProductRoutes()
+	r.setBulkRoutes()
 	return r.engine
 }
