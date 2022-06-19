@@ -33,4 +33,53 @@ requirements:
 
 ![services-diagram](./diagram/mds.png)
 
-
+### System tests
+1. Create Product
+```bash
+   curl --location --request POST 'localhost:8080/api/v1/products' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+"name":"coffee",
+"sku":"AABBSSWW",
+"amount":200,
+"country_code":"eg"
+}'
+```
+2. Get Product by SKU
+```bash
+  curl --location --request GET 'localhost:8080/api/v1/products/AABBSSWW'
+```
+3. Update Product by SKU
+```bash
+  curl --location --request PUT 'localhost:8080/api/v1/products/AABBSSWW' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name":"coffee machine",
+    "country_code":"eg",
+    "amount":250
+}'
+```
+4. Get products
+```bash
+curl --location --request GET 'localhost:8080/api/v1/products?limit=10&page=2' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name":"coffee machine",
+    "country_code":"eg",
+    "amount":250
+}'
+```
+5. Bulk upload
+```bash
+curl --location --request POST 'localhost:8080/api/v1/bulk/orders' \
+--form 'file=@"/path/to/file"'
+```
+6. Create Order
+```bash
+curl --location --request POST 'localhost:8080/api/v1/products/e920c573f128/orders' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "amount":-250,
+    "country_code":"gh"
+}'
+```
