@@ -15,7 +15,7 @@ func init() {
 	if err != nil {
 		log.Fatal().Msg(err.Error())
 	}
-
+	rabbitMQ.GetRabbitMQCConsumeChannel()
 }
 func main() {
 	channel := rabbitMQ.GetRabbitMQCConsumeChannel()
@@ -32,6 +32,7 @@ func main() {
 		log.Fatal().Msg(err.Error())
 	}
 	forever := make(chan bool)
+	log.Info().Msg("Queue worker is running ")
 	go func() {
 		for message := range messages {
 			var records []models.OrderCSV
@@ -73,7 +74,7 @@ func main() {
 					}
 					continue
 				}
-				if prod.Amount < v.StockChange {
+				if prod.Amount+v.StockChange < 0 {
 					log.Info().Msg("insufficient stock balance")
 					continue
 				}
