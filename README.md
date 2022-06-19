@@ -83,3 +83,13 @@ curl --location --request POST 'localhost:8080/api/v1/products/e920c573f128/orde
     "country_code":"gh"
 }'
 ```
+
+## Run The system
+
+```bash
+> go mod tidy
+> go mod vendor
+> docker-compose up [runinng mysql and rabbit mq containers]
+> go run services/api/main.go [api]
+> go run services/consumer/main.go [worker]
+```
